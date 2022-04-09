@@ -1,13 +1,14 @@
 from xml.dom.minidom import parse
 
-INPUT_PATH = 'First_Exercise/Data/cf79.xml'
-OUTPUT_PATH = 'First_Exercise/Outputs/autores.xml'
+INPUT_PATH = 'Data/cf79.xml'
+OUTPUT_PATH = 'Outputs/autores.xml'
+
 
 def extract_authors_from_xml(path: str) -> str:
     """Extract the authors tag from a given xml
     Args:
         path (str): The path where the xml is located
-    
+
     Returns:
         List: A list containing all the authors tags
     """
@@ -15,9 +16,10 @@ def extract_authors_from_xml(path: str) -> str:
     docs = parse(path)
     authors = docs.getElementsByTagName("AUTHOR")
     for author in authors:
-        output.append(author + '\n')
+        output.append(f"<AUTHOR>{author.firstChild.data}</AUTHOR>\n")
 
     return ''.join(output)
+
 
 def write_elements_to_archive(authors: str, path: str) -> None:
     """Given a string with elements, write it to an archive
@@ -27,6 +29,7 @@ def write_elements_to_archive(authors: str, path: str) -> None:
     """
     with open(path, 'w') as output:
         output.write(authors)
+
 
 if __name__ == '__main__':
     authors = extract_authors_from_xml(INPUT_PATH)
