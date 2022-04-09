@@ -11,6 +11,7 @@ class TitleHandler(ContentHandler):
     def __init__(self):
         self.current_data = ""
         self.title = ""
+        self.titles = []
 
     def startElement(self, tag, _):
         if tag == "TITLE":
@@ -18,7 +19,7 @@ class TitleHandler(ContentHandler):
 
     def endElement(self, _):
         if self.current_data == "TITLE":
-            output_file.write(f'<TITLE>{self.title}</TITLE>\n')
+            self.titles.append(f'<TITLE>{self.title}</TITLE>\n')
 
         self.current_data = ""
         self.title = ""
@@ -27,11 +28,21 @@ class TitleHandler(ContentHandler):
         if self.current_data == "TITLE":
             self.title += content
 
+    @staticmethod
+    def write_elements_to_archive(titles: str, path: str) -> None:
+        """Given a string with elements, write it to an archive
+        Args:
+            titles (str): The elements to be written in the path
+            path (str): The path where the elements will be written
+        """
+        with open(path, 'w') as output:
+            output.write(''.join(titles))
+
 
 if __name__ == "__main__":
     parser = make_parser()
     Handler = TitleHandler()
 
     parser.setContentHandler(Handler)
-    with open(OUTPUT_PATH, 'w') as output_file:
-        parser.parse(INPUT_PATH)
+    parser.parse(INPUT_PATH)
+    Handler.write_elements_to_archive(Handler.titles, OUTPUT_PATH)
