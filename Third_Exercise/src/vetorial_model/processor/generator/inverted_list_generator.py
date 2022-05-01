@@ -43,8 +43,8 @@ class InvertedListGenerator(DefaultGenerator):
                 return rows
 
         abstract = reader.get_tag_element_value(abstracts[-1])
-        abstract = Normalize(abstract).normalized_text
-        for text in abstract.split(" "):
+        abstract = Normalize(abstract).tokenized_text
+        for text in abstract:
             rows.append(f"{text.strip()}{self.separator}{record_num.strip()}")
 
         return rows

@@ -1,5 +1,9 @@
 import re
 import unicodedata
+import nltk
+
+nltk.download('stopwords')
+nltk.download('punkt')
 
 
 class Normalize:
@@ -12,6 +16,7 @@ class Normalize:
         self.text = text
         self.normalized_text = self.normalize(text)
         self.normalized_text_size = len(self.normalized_text)
+        self.tokenized_text = self.__tokenize()
 
     @staticmethod
     def __remove_accent(text: str) -> str:
@@ -174,3 +179,13 @@ class Normalize:
             int: Number of votes
         """
         return self.normalized_text_size - (len(self.normalized_text.split("0")) - 1)
+
+    def __tokenize(self) -> list:
+        """Tokenize text
+
+        Returns:
+            list: List of tokens
+        """
+        stop_words = [word.upper() for word in nltk.corpus.stopwords.words("english")]
+        return [word for word in nltk.word_tokenize(self.normalized_text) if word not in stop_words]
+    
