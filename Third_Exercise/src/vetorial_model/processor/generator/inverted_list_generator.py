@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Any, Dict, List
 from xml.dom.minidom import Document
 from vetorial_model.utils.normalizer_utils import Normalize
 from vetorial_model.processor.reader.data_reader import DataReader
@@ -27,9 +27,9 @@ class InvertedListGenerator(DefaultGenerator):
             document (Document): The inverted list
 
         Returns:
-            Tuple[str, str]: The last_query_number and the normalized_text
+            List[str]: The list of rows for the csv file
         """
-        rows: List[str] = []
+        rows: List[Any] = []
         record_numbers = reader.get_tag_elements("RECORDNUM", document)
         record_num = reader.get_tag_element_value(record_numbers[-1])
         if not record_num:
@@ -43,8 +43,8 @@ class InvertedListGenerator(DefaultGenerator):
                 return rows
 
         abstract = reader.get_tag_element_value(abstracts[-1])
-        abstract = Normalize(abstract).tokenized_text
-        for text in abstract:
+        abstract_words = Normalize(abstract).tokenized_text
+        for text in abstract_words:
             rows.append(f"{text.strip()}{self.separator}{record_num.strip()}")
 
         return rows

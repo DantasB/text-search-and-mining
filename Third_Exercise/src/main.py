@@ -4,6 +4,7 @@ from vetorial_model.processor.generator import (
     queries_generator as qg,
     expected_generator as eg,
 )
+
 from vetorial_model.processor.reader import (
     configuration_reader,
     data_reader,

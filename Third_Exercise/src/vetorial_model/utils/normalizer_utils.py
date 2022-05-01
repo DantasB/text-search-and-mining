@@ -2,8 +2,8 @@ import re
 import unicodedata
 import nltk
 
-nltk.download('stopwords')
-nltk.download('punkt')
+nltk.download("stopwords")
+nltk.download("punkt")
 
 
 class Normalize:
@@ -187,5 +187,8 @@ class Normalize:
             list: List of tokens
         """
         stop_words = [word.upper() for word in nltk.corpus.stopwords.words("english")]
-        return [word for word in nltk.word_tokenize(self.normalized_text) if word not in stop_words]
-    
+        return [
+            word
+            for word in nltk.word_tokenize(self.normalized_text)
+            if word not in stop_words
+        ]
