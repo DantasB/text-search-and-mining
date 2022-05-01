@@ -57,12 +57,3 @@ class DefaultGenerator:
             class_name (str): The class name
         """
         self.logger = get_logger_with_date_output(class_name)
-
-    def setup_generator_logger(self, logger_name: str):
-        """Setup the logger
-
-        Args:
-            logger_name (str): The name of the logger
-        """
-
-        self.logger = get_logger_with_date_output(logger_name)

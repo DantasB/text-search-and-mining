@@ -1,6 +1,5 @@
 from contextlib import contextmanager
-from typing import List, Optional
-from xml.dom.minidom import Document
+from typing import Optional
 from vetorial_model.utils.logger_utils import get_logger_with_date_output
 
 
@@ -28,10 +27,10 @@ class DefaultReader:
             TextIOWrapper: The file
         """
         if read_from_file_path and self.file_path is not None:
-            with open(self.file_path, "r") as file:
+            with open(self.file_path, "r", encoding="utf-8") as file:
                 yield file
         elif not read_from_file_path and archive is not None:
-            with open(self.archive, "r") as file:
+            with open(archive, "r", encoding="utf-8") as file:
                 yield file
         elif read_from_file_path and self.file_path is None:
             raise ValueError("The file_path is not set. Please set the file_path.")

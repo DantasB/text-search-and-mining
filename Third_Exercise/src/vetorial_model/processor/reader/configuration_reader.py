@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List
 from vetorial_model.processor.reader.default import DefaultReader
 
 
@@ -17,7 +17,7 @@ class ConfigurationReader(DefaultReader):
         self.expected = self.get_configuration_attribute("ESPERADOS")
         self.write = self.get_configuration_attribute("ESCREVA")
 
-    def get_configuration_attribute(self, attribute_name: str) -> Optional[str]:
+    def get_configuration_attribute(self, attribute_name: str) -> List[str]:
         """Get the value of the attribute
 
         Args:

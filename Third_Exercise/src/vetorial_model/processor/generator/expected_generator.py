@@ -1,4 +1,3 @@
-from typing import List
 from xml.dom.minidom import Document
 from vetorial_model.processor.reader.data_reader import DataReader
 from vetorial_model.utils.normalizer_utils import Normalize

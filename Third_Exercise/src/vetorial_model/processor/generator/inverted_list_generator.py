@@ -1,3 +1,4 @@
+from typing import Dict, List
 from xml.dom.minidom import Document
 from vetorial_model.utils.normalizer_utils import Normalize
 from vetorial_model.processor.reader.data_reader import DataReader
@@ -28,7 +29,7 @@ class InvertedListGenerator(DefaultGenerator):
         Returns:
             Tuple[str, str]: The last_query_number and the normalized_text
         """
-        rows = []
+        rows: List[str] = []
         record_numbers = reader.get_tag_elements("RECORDNUM", document)
         record_num = reader.get_tag_element_value(record_numbers[-1])
         if not record_num:
@@ -58,13 +59,13 @@ class InvertedListGenerator(DefaultGenerator):
             dict: The grouped rows
         """
 
-        grouped_rows = {}
+        grouped_rows: Dict[str, List[str]] = {}
         for row in rows:
             splitted_row = row.split(self.separator)
             word = splitted_row[0]
             if not word:
                 continue
-            
+
             if word not in grouped_rows:
                 grouped_rows[word] = []
             grouped_rows[word].append(splitted_row[1])

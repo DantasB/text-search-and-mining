@@ -14,13 +14,17 @@ class DataReader(DefaultReader):
         super().__init__(file_path)
         super().setup_reader_logger("DataReader")
 
-    def read_xml_doc(self) -> Document:
+    def __read_xml_doc(self) -> Document:
         """Read the xml file
 
         Returns:
             Document: The xml file
         """
         self.logger.info(f"Reading xml file {self.file_path}")
+
+        if not self.file_path:
+            raise Exception("Xml file not found")
+
         return parse(self.file_path)
 
     def get_tag_elements(self, tag_name: str, xml_doc: Optional[Document] = None):
@@ -35,7 +39,10 @@ class DataReader(DefaultReader):
         """
         print("\n")
         self.logger.info(f"Reading tag elements {tag_name}")
-        document = xml_doc or self.read_xml_doc()
+        if xml_doc is None and not self.file_path:
+            raise Exception("Xml file not found")
+
+        document = xml_doc or self.__read_xml_doc()
         tag_elements = document.getElementsByTagName(tag_name)
         self.logger.info(f"Found {len(tag_elements)} tag elements")
         return tag_elements

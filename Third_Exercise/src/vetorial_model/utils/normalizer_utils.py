@@ -32,16 +32,15 @@ class Normalize:
 
     @staticmethod
     def __treat_text(text: str) -> str:
-        """Remove \t \s \n \r from text
+        """Remove \t \n \r from text
 
         Args:
             text (str): Text to treat
 
         Returns:
-            str: Text without \t \s \n \r
+            str: Text without \t \n \r
         """
         text = text.replace("\t", " ")
-        text = text.replace("\s", " ")
         text = text.replace("\n", " ")
         text = text.replace("\r", " ")
         return text
