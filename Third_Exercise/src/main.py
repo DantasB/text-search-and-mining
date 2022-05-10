@@ -1,4 +1,5 @@
 from typing import List
+from vetorial_model.indexer.indexer import Indexer
 from vetorial_model.processor.generator import (
     inverted_list_generator as ilg,
     queries_generator as qg,
@@ -13,6 +14,7 @@ from vetorial_model.processor.reader import (
 
 CONSULT_PROCESSOR_CONFIG_FILE = "./Configs/PC.CFG"
 INVERT_LIST_CONFIG_FILE = "./Configs/GLI.CFG"
+INDEXER_CONFIG_FILE = "./Configs/INDEX.CFG"
 
 
 def generate_consultas_and_esperados_data():
@@ -58,8 +60,23 @@ def generate_inverted_list_data():
             inverted_rows += generator.build_csv_row(reader, record)
 
     generator.write_dictionary_to_file_path(generator.group_by_word(inverted_rows))
+    return generator.last_document
+
+
+def generate_indexer(last_document: str):
+    """Generate the model"""
+    indexer_configuration = configuration_reader.ConfigurationReader(
+        INDEXER_CONFIG_FILE
+    )
+
+    indexer = Indexer(
+        indexer_configuration.read[0], last_document, indexer_configuration.write[0]
+    )
+    terms_dataframe = indexer.calculate_dataframe_tfidf()
+    indexer.write_dataframe_to_file_path(terms_dataframe)
 
 
 if __name__ == "__main__":
     generate_consultas_and_esperados_data()
-    generate_inverted_list_data()
+    last_document = generate_inverted_list_data()
+    generate_indexer(last_document)
