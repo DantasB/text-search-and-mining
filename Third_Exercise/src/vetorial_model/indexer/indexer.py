@@ -42,7 +42,7 @@ class Indexer:
                 columns=range(1, int(self.last_document) + 1),
             )
         )
-        
+
         trash_words = []
 
         self.logger.debug("Calculating tfidf")
@@ -82,5 +82,5 @@ class Indexer:
             dataframe (pandas.DataFrame): The dataframe to be written
         """
         self.logger.debug("Writing dataframe to file path")
-        dataframe.to_csv(self.save_path, index=False)
+        dataframe.to_csv(self.save_path, index=False, sep=";", encoding="utf_8")
         self.logger.debug("Dataframe written to file path")
