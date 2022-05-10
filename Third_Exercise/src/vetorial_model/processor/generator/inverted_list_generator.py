@@ -18,6 +18,7 @@ class InvertedListGenerator(DefaultGenerator):
     def __init__(self, file_path: str, separator: str = ";"):
         super().__init__(file_path, self.__COLUMNS, separator)
         super().setup_generator_logger("InvertedListGenerator")
+        self.last_document = ""
 
     def build_csv_row(self, reader: DataReader, document: Document):
         """Build the csv row for the inverted list
@@ -34,7 +35,7 @@ class InvertedListGenerator(DefaultGenerator):
         record_num = reader.get_tag_element_value(record_numbers[-1])
         if not record_num:
             return rows
-
+        self.last_document = max(self.last_document, record_num)
         abstracts = reader.get_tag_elements("ABSTRACT", document)
         abstract = ""
         if len(abstracts) == 0:
