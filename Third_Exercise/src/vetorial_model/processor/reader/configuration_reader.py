@@ -16,6 +16,8 @@ class ConfigurationReader(DefaultReader):
         self.read = self.get_configuration_attribute("LEIA")
         self.expected = self.get_configuration_attribute("ESPERADOS")
         self.write = self.get_configuration_attribute("ESCREVA")
+        self.model = self.get_configuration_attribute("MODELO")
+        self.results = self.get_configuration_attribute("RESULTADOS")
 
     def get_configuration_attribute(self, attribute_name: str) -> List[str]:
         """Get the value of the attribute

@@ -11,6 +11,7 @@ class Indexer:
         self.inverted_list_file_path = inverted_list_file_path
         self.save_path = save_path
         self.last_document = last_document
+        self.list_of_documents = []
         self.logger = get_logger_with_date_output("Indexer")
         self.words_table = self.__read_words_table(inverted_list_file_path)
     
@@ -83,4 +84,5 @@ class Indexer:
         """
         self.logger.debug("Writing dataframe to file path")
         dataframe.to_csv(self.save_path, index=False, sep=";", encoding="utf_8")
+        self.list_of_documents = dataframe.columns.tolist()[1:]
         self.logger.debug("Dataframe written to file path")

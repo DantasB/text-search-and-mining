@@ -11,11 +11,12 @@ from vetorial_model.processor.reader import (
     data_reader,
     inverted_list_reader,
 )
+from vetorial_model.search_engine.engine import SearchEngine
 
 CONSULT_PROCESSOR_CONFIG_FILE = "./Configs/PC.CFG"
 INVERT_LIST_CONFIG_FILE = "./Configs/GLI.CFG"
 INDEXER_CONFIG_FILE = "./Configs/INDEX.CFG"
-
+BUSCA_CONFIG_FILE = "./Configs/BUSCA.CFG"
 
 def generate_consultas_and_esperados_data():
     """Generate the consultas and esperados data"""
@@ -74,9 +75,22 @@ def generate_indexer(last_document: str):
     )
     terms_dataframe = indexer.calculate_dataframe_tfidf()
     indexer.write_dataframe_to_file_path(terms_dataframe)
+    return indexer.list_of_documents
+    
+def search_documents(documents_list: List[str]):
+    """Search documents"""
+    search_configuration = configuration_reader.ConfigurationReader(
+        BUSCA_CONFIG_FILE
+    )
 
+    search_engine = SearchEngine(documents_list)
+    search_engine.read_tf_idf_table_and_generate_term_value_dictionary(search_configuration.model[0])
+    search_engine.read_queries_and_generate_query_token_dictionary(search_configuration.queries[0])
+    result = search_engine.search_documents()
+    search_engine.write_search_result(result, search_configuration.results[0])
 
 if __name__ == "__main__":
     generate_consultas_and_esperados_data()
     last_document = generate_inverted_list_data()
-    generate_indexer(last_document)
+    documents_list = generate_indexer(last_document)
+    search_documents(documents_list)
