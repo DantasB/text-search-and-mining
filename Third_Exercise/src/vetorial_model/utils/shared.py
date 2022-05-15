@@ -3,7 +3,7 @@ import math
 
 def calculate_tf_idf(
     number_of_documents: int, number_of_terms: int, document_frequency: int
-) -> int:
+) -> float:
     """Calculate the tfidf of a word
 
     Args:
@@ -12,8 +12,11 @@ def calculate_tf_idf(
         document_frequency (int): The document frequency
 
     Returns:
-        int: The tfidf
+        float: The tfidf
     """
-    return 1 + math.log(document_frequency) * math.log(
+    if document_frequency == 0:
+        return 0
+
+    return (1 + math.log2(document_frequency)) * math.log(
         number_of_documents / number_of_terms
     )
