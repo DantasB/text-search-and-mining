@@ -52,7 +52,9 @@ def generate_inverted_list_data():
         INVERT_LIST_CONFIG_FILE
     )
 
-    generator = ilg.InvertedListGenerator(inverted_list_configuration.write[0])
+    generator = ilg.InvertedListGenerator(
+        inverted_list_configuration.write[0], inverted_list_configuration.stemmer
+    )
     reader = inverted_list_reader.InvertedListReader(inverted_list_configuration.read)
     inverted_rows = []
     for file in reader.files:
