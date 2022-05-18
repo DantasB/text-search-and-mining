@@ -107,10 +107,10 @@ def search_documents(documents_list: List[str], stemmer: bool):
 
 
 if __name__ == "__main__":
-    # generate_consultas_and_esperados_data()
-    # number_of_documents, stemmer = generate_inverted_list_data()
-    # list_of_documents = generate_indexer(number_of_documents, stemmer)
-    # search_documents(list_of_documents, stemmer)
+    generate_consultas_and_esperados_data()
+    number_of_documents, stemmer = generate_inverted_list_data()
+    list_of_documents = generate_indexer(number_of_documents, stemmer)
+    search_documents(list_of_documents, stemmer)
 
     validator = Validator(
         results_path="./Results/busca_stemmer.csv",

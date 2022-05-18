@@ -11,7 +11,7 @@ class Validator:
         self.results = self.__read(results_path)
         self.expected_results_path = expected_results_path
         self.expected_results = self.__read(expected_results_path)
-        self.output_path = "Avalia/results.csv"
+        self.output = "Avalia/results.csv"
         self.logger = get_logger_with_date_output("Validator")
 
     @staticmethod
@@ -80,8 +80,8 @@ class Validator:
                 ignore_index=True,
             )
 
-        df.to_csv(self.results_path, sep=";", index=False)
-        self.logger.info("Results saved")
+        df.to_csv(self.output, sep=";", index=False)
+
     
     def validate(self):
         self.change_expected_results_format()
