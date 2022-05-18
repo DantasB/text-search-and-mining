@@ -17,6 +17,10 @@ class InvertedListGenerator(DefaultGenerator):
     __COLUMNS = ["WORD", "DOCUMENTS_LIST"]
 
     def __init__(self, file_path: str, stemmer: bool, separator: str = ";"):
+        if stemmer and file_path.endswith(".csv"):
+            file_path = file_path.replace(".csv", "_stemmer.csv")
+        else:
+            file_path = file_path.replace(".csv", "_nostemmer.csv")
         super().__init__(file_path, self.__COLUMNS, separator)
         super().setup_generator_logger("InvertedListGenerator")
         self.last_document = ""
