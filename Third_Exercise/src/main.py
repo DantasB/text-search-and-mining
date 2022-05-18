@@ -12,6 +12,7 @@ from vetorial_model.processor.reader import (
     inverted_list_reader,
 )
 from vetorial_model.search_engine.engine import SearchEngine
+from vetorial_model.validator.validator import Validator
 
 CONSULT_PROCESSOR_CONFIG_FILE = "./Configs/PC.CFG"
 INVERT_LIST_CONFIG_FILE = "./Configs/GLI.CFG"
@@ -97,14 +98,23 @@ def search_documents(documents_list: List[str], stemmer: bool):
         results_path = search_configuration.results[0].replace(".csv", "_nostemmer.csv")
 
     search_engine.read_tf_idf_table_and_generate_term_value_dictionary(model_path)
-    search_engine.read_queries_and_generate_query_token_dictionary(search_configuration.queries[0])
+    search_engine.read_queries_and_generate_query_token_dictionary(
+        search_configuration.queries[0]
+    )
 
     result = search_engine.search_documents()
     search_engine.write_search_result(result, results_path)
 
 
 if __name__ == "__main__":
-    generate_consultas_and_esperados_data()
-    number_of_documents, stemmer = generate_inverted_list_data()
-    list_of_documents = generate_indexer(number_of_documents, stemmer)
-    search_documents(list_of_documents, stemmer)
+    # generate_consultas_and_esperados_data()
+    # number_of_documents, stemmer = generate_inverted_list_data()
+    # list_of_documents = generate_indexer(number_of_documents, stemmer)
+    # search_documents(list_of_documents, stemmer)
+
+    validator = Validator(
+        results_path="./Results/busca_stemmer.csv",
+        expected_results_path="./Results/esperados.csv",
+    )
+
+    validator.validate()
