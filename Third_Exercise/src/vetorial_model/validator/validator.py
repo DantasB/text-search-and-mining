@@ -3,6 +3,7 @@ from typing import Dict, Set
 import pandas as pd
 
 from vetorial_model.utils.logger_utils import get_logger_with_date_output
+from vetorial_model.utils.math_utils import f1_score, precision, recall
 
 
 class Validator:
@@ -82,7 +83,6 @@ class Validator:
 
         df.to_csv(self.output, sep=";", index=False)
 
-    
     def validate(self):
         self.change_expected_results_format()
         self.logger.info("Comparing results")
@@ -99,14 +99,12 @@ class Validator:
             documents = self.filter_documents(results_df, threshold=0.0001, evaluate=True)
             expected_documents = self.filter_documents(expected_results_df, threshold=0, evaluate=False)
 
-            results[query]["Precision"] = len(documents.intersection(expected_documents)) / len(documents) * 100 if len(documents) > 0 else 0
+            results[query]["Precision"] = precision(documents, expected_documents)
 
-            results[query]["Recall"] = len(documents.intersection(expected_documents)) / len(expected_documents) * 100 if len(expected_documents) > 0 else 0
+            results[query]["Recall"] = recall(documents, expected_documents)
 
-            results[query]["F1"] = (
-                2 * results[query]["Precision"] * results[query]["Recall"]
-            ) / (results[query]["Precision"] + results[query]["Recall"]) if (
-                results[query]["Precision"] + results[query]["Recall"]
-            ) > 0 else 0
+            results[query]["F1"] = f1_score(
+                results[query]["Precision"], results[query]["Recall"]
+            )
 
         self.save_results(results)
