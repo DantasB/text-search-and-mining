@@ -188,7 +188,7 @@ class Normalize:
         """
         stop_words = [word.lower() for word in nltk.corpus.stopwords.words("english")]
         return [
-            word
+            word.lower()
             for word in nltk.word_tokenize(self.normalized_text)
             if word not in stop_words
         ]
