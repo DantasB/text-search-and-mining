@@ -18,6 +18,25 @@ class ConfigurationReader(DefaultReader):
         self.write = self.get_configuration_attribute("ESCREVA")
         self.model = self.get_configuration_attribute("MODELO")
         self.results = self.get_configuration_attribute("RESULTADOS")
+        self.stemmer = self.get_configuration_attribute("STEMMER")
+
+    def define_stemmer(self, stemmer: str) -> bool:
+        """Define if the stemmer is used
+
+        Args:
+            stemmer (str): The name of the stemmer
+
+        Returns:
+            bool: True if the stemmer is used
+        """
+        if stemmer == "STEMMER":
+            return True
+        elif stemmer == "NOSTEMMER":
+            return False
+        self.logger.warning(
+            "The stemmer name is not defined. The default stemmer is used."
+        )
+        return False
 
     def get_configuration_attribute(self, attribute_name: str) -> List[str]:
         """Get the value of the attribute
@@ -33,6 +52,8 @@ class ConfigurationReader(DefaultReader):
         with self.read_file() as configuration_attributes:
             for configuration_attribute in configuration_attributes:
                 configuration_attribute = configuration_attribute.split("=")
+                if len(configuration_attribute) == 1 and attribute_name == "STEMMER":
+                    return configuration_attribute[0].rstrip("\n")
                 if configuration_attribute[0] == attribute_name:
                     attribute_value = configuration_attribute[1]
                     self.logger.info(

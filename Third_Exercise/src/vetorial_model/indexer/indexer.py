@@ -8,8 +8,27 @@ from vetorial_model.utils.shared import calculate_tf_idf
 
 class Indexer:
     def __init__(
-        self, inverted_list_file_path: str, last_document: str, save_path: str
+        self,
+        stemmer: bool,
+        inverted_list_file_path: str,
+        last_document: str,
+        save_path: str,
     ):
+        if (
+            stemmer
+            and inverted_list_file_path.endswith(".csv")
+            and save_path.endswith(".csv")
+        ):
+            inverted_list_file_path = inverted_list_file_path.replace(
+                ".csv", "_stemmer.csv"
+            )
+            save_path = save_path.replace(".csv", "_stemmer.csv")
+        else:
+            inverted_list_file_path = inverted_list_file_path.replace(
+                ".csv", "_nostemmer.csv"
+            )
+            save_path = save_path.replace(".csv", "_nostemmer.csv")
+
         self.inverted_list_file_path = inverted_list_file_path
         self.save_path = save_path
         self.last_document = int(last_document.strip())

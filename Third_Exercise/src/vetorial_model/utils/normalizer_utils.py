@@ -170,7 +170,7 @@ class Normalize:
         text = self.__remove_keys_brackets(text)
         text = self.__remove_square_brackets(text)
         text = self.__remove_punctuation(text)
-        return text.upper()
+        return text.lower()
 
     def calculate_number_of_votes(self) -> int:
         """Any number differente of zero is a vote
@@ -186,9 +186,9 @@ class Normalize:
         Returns:
             list: List of tokens
         """
-        stop_words = [word.upper() for word in nltk.corpus.stopwords.words("english")]
+        stop_words = [word.lower() for word in nltk.corpus.stopwords.words("english")]
         return [
-            word
+            word.lower()
             for word in nltk.word_tokenize(self.normalized_text)
             if word not in stop_words
         ]

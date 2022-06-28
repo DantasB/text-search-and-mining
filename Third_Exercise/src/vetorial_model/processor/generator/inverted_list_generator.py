@@ -3,6 +3,7 @@ from xml.dom.minidom import Document
 from vetorial_model.utils.normalizer_utils import Normalize
 from vetorial_model.processor.reader.data_reader import DataReader
 from vetorial_model.processor.generator.default import DefaultGenerator
+from vetorial_model.stemmer.porter import PorterStemmer
 
 
 class InvertedListGenerator(DefaultGenerator):
@@ -15,10 +16,15 @@ class InvertedListGenerator(DefaultGenerator):
 
     __COLUMNS = ["WORD", "DOCUMENTS_LIST"]
 
-    def __init__(self, file_path: str, separator: str = ";"):
+    def __init__(self, file_path: str, stemmer: bool, separator: str = ";"):
+        if stemmer and file_path.endswith(".csv"):
+            file_path = file_path.replace(".csv", "_stemmer.csv")
+        else:
+            file_path = file_path.replace(".csv", "_nostemmer.csv")
         super().__init__(file_path, self.__COLUMNS, separator)
         super().setup_generator_logger("InvertedListGenerator")
         self.last_document = ""
+        self.stemmer = stemmer
 
     def build_csv_row(self, reader: DataReader, document: Document):
         """Build the csv row for the inverted list
@@ -45,6 +51,11 @@ class InvertedListGenerator(DefaultGenerator):
 
         abstract = reader.get_tag_element_value(abstracts[-1])
         abstract_words = Normalize(abstract).tokenized_text
+        if self.stemmer:
+            abstract_words = [
+                PorterStemmer().stem(word, 0, len(word) - 1) for word in abstract_words
+            ]
+
         for text in abstract_words:
             rows.append(f"{text.strip()}{self.separator}{record_num.strip()}")
 
