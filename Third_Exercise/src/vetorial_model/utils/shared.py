@@ -17,6 +17,6 @@ def calculate_tf_idf(
     if document_frequency == 0:
         return 0
 
-    return (1 + math.log2(document_frequency)) * math.log(
+    return (1 + math.log2(document_frequency)) * math.log2(
         number_of_documents / number_of_terms
     )

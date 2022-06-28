@@ -38,9 +38,8 @@ class ExpectedGenerator(DefaultGenerator):
             items = reader.get_tag_elements("Item", record)
             for item in items:
                 doc_number = reader.get_tag_element_value(item)
-                doc_votes = Normalize(
-                    reader.get_tag_element_attribute_value(item, "score")
-                ).calculate_number_of_votes()
+                text = reader.get_tag_element_attribute_value(item, "score")
+                doc_votes = len(text) - (len(text.split("0")) - 1)
                 rows.append(
                     f"{query_number}{self.separator}{doc_number}{self.separator}{doc_votes}"
                 )

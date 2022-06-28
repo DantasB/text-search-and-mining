@@ -7,13 +7,19 @@ from vetorial_model.utils.math_utils import f1_score, precision, recall
 
 
 class Validator:
-    def __init__(self, results_path: str, expected_results_path: str):
+    def __init__(self, results_path: str, expected_results_path: str, stemmer: bool):
         self.results_path = results_path
         self.results = self.__read(results_path)
         self.expected_results_path = expected_results_path
         self.expected_results = self.__read(expected_results_path)
-        self.output = "Avalia/results.csv"
-        self.report = "Avalia/report.md"
+        if stemmer:
+            output_path = "Avalia/results.csv".replace(".csv", "_stemmer.csv")
+            report_path = "Avalia/report.md".replace(".md", "_stemmer.md")
+        else:
+            output_path = "Avalia/results.csv".replace(".csv", "_nostemmer.csv")
+            report_path = "Avalia/report.md".replace(".md", "_nostemmer.md")
+        self.output = output_path
+        self.report = report_path
         self.logger = get_logger_with_date_output("Validator")
 
     @staticmethod
@@ -57,7 +63,7 @@ class Validator:
             )
 
         self.expected_results = expected_results
-
+        
     def filter_documents(
         self, results_df: pd.DataFrame, threshold: float, evaluate: bool
     ) -> Set:
@@ -121,7 +127,6 @@ class Validator:
                 self.expected_results["Query"] == query
             ]
             self.logger.info(f"Comparing query {query}")
-
             documents = self.filter_documents(
                 results_df, threshold=0.0001, evaluate=True
             )
