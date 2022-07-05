@@ -117,6 +117,6 @@ class SearchEngine:
         """
         self.logger.info("Writing search result")
         with open(file_path, "w", encoding="utf_8") as file:
-            file.write("Query;Ranking;\n")
+            file.write("Query;Ranking\n")
             for query, results in search_result.items():
                 file.write(f"{query};{results}\n")

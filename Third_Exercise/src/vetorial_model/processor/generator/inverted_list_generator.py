@@ -45,6 +45,7 @@ class InvertedListGenerator(DefaultGenerator):
 
         abstract = reader.get_tag_element_value(abstracts[-1])
         abstract_words = Normalize(abstract).tokenized_text
+        abstract_words = [word for word in abstract_words if len(word) > 2]
         for text in abstract_words:
             rows.append(f"{text.strip()}{self.separator}{record_num.strip()}")
 
