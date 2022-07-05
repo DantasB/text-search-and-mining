@@ -56,6 +56,7 @@ class InvertedListGenerator(DefaultGenerator):
                 PorterStemmer().stem(word, 0, len(word) - 1) for word in abstract_words
             ]
 
+        abstract_words = [word for word in abstract_words if len(word) > 2]
         for text in abstract_words:
             rows.append(f"{text.strip()}{self.separator}{record_num.strip()}")
 

@@ -46,7 +46,6 @@ def generate_consultas_and_esperados_data():
 
     expected_generator.write_list_to_file_path(waited_queries)
 
-
 def generate_inverted_list_data():
     """Generate the inverted list data"""
     inverted_list_configuration = configuration_reader.ConfigurationReader(
@@ -104,17 +103,18 @@ def search_documents(documents_list: List[str], stemmer: bool):
 
     result = search_engine.search_documents()
     search_engine.write_search_result(result, results_path)
-
+    return results_path
 
 if __name__ == "__main__":
     generate_consultas_and_esperados_data()
     number_of_documents, stemmer = generate_inverted_list_data()
     list_of_documents = generate_indexer(number_of_documents, stemmer)
-    search_documents(list_of_documents, stemmer)
+    results_path = search_documents(list_of_documents, stemmer)
 
     validator = Validator(
-        results_path="./Results/busca_stemmer.csv",
+        results_path=results_path,
         expected_results_path="./Results/esperados.csv",
+        stemmer = stemmer,
     )
 
     validator.validate()

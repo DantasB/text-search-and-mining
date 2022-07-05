@@ -27,7 +27,7 @@ class Normalize:
 
         Returns:
             str: Text without accent
-        """ """ Remove accent from text """
+        """
         text = (
             unicodedata.normalize("NFKD", text)
             .encode("ASCII", "ignore")
@@ -60,7 +60,7 @@ class Normalize:
         Returns:
             str: Text without semicolon
         """
-        text = text.replace(";", "")
+        text = text.replace(";", " ")
         return text
 
     @staticmethod
@@ -86,8 +86,8 @@ class Normalize:
         Returns:
             str: Text without quotes
         """
-        text = text.replace('"', "")
-        text = text.replace("'", "")
+        text = text.replace('"', " ")
+        text = text.replace("'", " ")
         return text
 
     @staticmethod
@@ -100,8 +100,8 @@ class Normalize:
         Returns:
             str: Text without parenthesis
         """
-        text = text.replace("(", "")
-        text = text.replace(")", "")
+        text = text.replace("(", " ")
+        text = text.replace(")", " ")
         return text
 
     @staticmethod
@@ -114,14 +114,19 @@ class Normalize:
         Returns:
             str: Text without punctuation
         """
-        text = text.replace(".", "")
-        text = text.replace(",", "")
-        text = text.replace("!", "")
-        text = text.replace("?", "")
-        text = text.replace("-", "")
-        text = text.replace("/", "")
-        text = text.replace("(", "")
-        text = text.replace(")", "")
+        text = text.replace(".", " ")
+        text = text.replace("+", " ")
+        text = text.replace(">", " ")
+        text = text.replace("<", " ")
+        text = text.replace("=", " ")
+        text = text.replace(",", " ")
+        text = text.replace("!", " ")
+        text = text.replace("?", " ")
+        text = text.replace(":", " ")
+        text = text.replace("-", " ")
+        text = text.replace("/", " ")
+        text = text.replace("(", " ")
+        text = text.replace(")", " ")
         return text
 
     @staticmethod
@@ -134,8 +139,8 @@ class Normalize:
         Returns:
             str: Text without keys and brackets
         """
-        text = text.replace("{", "")
-        text = text.replace("}", "")
+        text = text.replace("{", " ")
+        text = text.replace("}", " ")
         return text
 
     @staticmethod
@@ -148,8 +153,8 @@ class Normalize:
         Returns:
             str: Text without square brackets
         """
-        text = text.replace("[", "")
-        text = text.replace("]", "")
+        text = text.replace("[", " ")
+        text = text.replace("]", " ")
         return text
 
     def normalize(self, text):
@@ -164,12 +169,17 @@ class Normalize:
         text = self.__remove_accent(text)
         text = self.__remove_semicolon(text)
         text = self.__treat_text(text)
-        text = self.__replace_multiple_space_by_one_regex(text)
         text = self.__remove_quotes(text)
         text = self.__remove_parenthesis(text)
         text = self.__remove_keys_brackets(text)
         text = self.__remove_square_brackets(text)
         text = self.__remove_punctuation(text)
+        text = self.__replace_multiple_space_by_one_regex(text)
+        words = text.split(" ")
+        words = [word for word in words if word.isalpha()]
+        ## filter for words with 2 or more letters
+        words = [word for word in words if len(word) > 2]
+        text = " ".join(words)
         return text.lower()
 
     def calculate_number_of_votes(self) -> int:
@@ -177,7 +187,7 @@ class Normalize:
 
         Returns:
             int: Number of votes
-        """
+        """  
         return self.normalized_text_size - (len(self.normalized_text.split("0")) - 1)
 
     def __tokenize(self) -> list:
